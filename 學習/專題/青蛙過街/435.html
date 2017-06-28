@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>FROG</title>
+<style>canvas { background: url("http://i.imgur.com/ExBdGfu.jpg"); }</style><br>
+</head>
+<body>
+    <form id="Time" runat="server">
+        <div id='div'>
+        </div>
+    </form>
+    
+    <canvas id = "myCanvas" width = "7200" height = "480"></canvas>
+    <img id = "grass" widht = "100" height = "100" src = "http://ppt.cc/smwpA" style = "display:none" >
+    <img id = "frog" widht = "100" height = "100" src = "http://i.imgur.com/eiDkUaJ.png" style = "display:none" >
+    <img id = "wood" widht = "100" height = "100" src = "http://i.imgur.com/jEXx4Rk.png" style = "display:none" >
+    <img id = "box" widht = "100" height = "100" src = "http://i.imgur.com/HcyxSeH.png"  style = "display:none" >  
+    <img id = "rock" widht = "100" height = "100" src = "http://i.imgur.com/3uBqRGt.png" style = "display:none" >     
+    <img id = "fish" widht = "100" height = "100" src = "http://i.imgur.com/MlnLnXr.png" style = "display:none" >
+    <img id = "end" widht = "100" height = "100" src = "http://i.imgur.com/Z4NI2SP.png" style = "display:none" >
+    <img id = "weeds" widht = "100" height = "100" src = "http://i.imgur.com/yLHXfVi.png" style = "display:none" >    
+    <img id = "ice" widht = "100" height = "100" src = "http://i.imgur.com/edJlhqr.jpg" style = "display:none" >     
+    <img id = "chicken" widht = "100" height = "100" src = "http://i.imgur.com/jYuFy2b.png" style = "display:none" >     
+
+    <script>
+    
+    //時間倒數---------------------------------------------------------//
+    var t = 20000;
+        
+    
+    function showTime(){
+        t -= 1;
+        document.getElementById('div').innerHTML= t;
+            
+        if(t==0){
+            alert("Time up!!!");
+            document.location.reload();
+        }
+    //每秒執行一次
+        setTimeout("showTime()",1000);
+    }
+    showTime();
+    //----------------------------------------------------------------//
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    var imgG = document.getElementById("grass");
+    var imgF = document.getElementById("frog");
+    var imgW = document.getElementById("wood");
+    var imgA = document.getElementById("box");
+    var imgR = document.getElementById("rock");
+    var imgFi = document.getElementById("fish");    
+    var imgE = document.getElementById("end");
+    var imgWe = document.getElementById("weeds");
+    var imgI = document.getElementById("ice");
+    var imgC = document.getElementById("chicken");
+    
+    var endsound = new Audio("MGS.mp3");
+    //--箱子A
+    var rectAwidth = 60;
+    var rectAheight = 60;
+    var rectAx = 270;
+    var rectAy = canvas.height/2;
+    var offsetAx = 0;
+    var offsetAy = 4;
+    //--木頭W
+    var rectWwidth = 50;
+    var rectWheight = 80;
+    var rectWx = 70;
+    var rectWy = 300;
+    var offsetWx = 0;
+    var offsetWy = 0;
+    //--手動蛙蛙F----------------------------------------------//
+    var rectFwidth = 60;
+    var rectFheight = 60;
+    var rectFx = 0;
+    var rectFy = 350;
+    var rightPressed = false;       //右鍵
+    var leftPressed = false;        //左鍵
+    var forwardPressed = false;     //上鍵
+    var backwardPressed = false;    //下鍵
+    //--草叢G1------------------------------------------------//
+    var rectG1width = 720;
+    var rectG1height = 100;
+    var rectG1x = 0;
+    var rectG1y = 0;
+    //--岩石R-------------------------------------------------//
+    var rectRwidth = 150;
+    var rectRheight = 150;
+    var rectRx = 120;
+    var rectRy = 100;
+    //--魚Fi--------------------------------------------------//
+    var rectFiwidth = 100;
+    var rectFiheight = 60;
+    var rectFix = 720;
+    var rectFiy = 250;
+    var offsetFix = 0;
+    var offsetFiy = 0;
+    //--結束E
+    var rectEwidth = 80;
+    var rectEheight = 80;
+    var rectEx = 640;
+    var rectEy = 100;
+    //--雜草We
+    var rectWewidth = 100;
+    var rectWeheight = 100;
+    var rectWex = 460;
+    var rectWey = 280;
+    //--冰地I
+    var rectIwidth = 230;
+    var rectIheight = 100;
+    var rectIx = 330;
+    var rectIy = 280;
+    //--雞雞C--------------------------------------------------//
+    var rectCwidth = 50;
+    var rectCheight = 50;
+    var rectCx = 600;
+    var rectCy = 300;
+    var offsetCx = 1;
+    var offsetCy = 1;
+    //--箱子A-------------------------------------------------//
+    function drawBox() {
+        //箱子A
+        ctx.drawImage(imgA,0,0,93,74,rectAx,rectAy,rectAwidth,rectAheight);
+        //木頭W
+        ctx.drawImage(imgW,0,0,65,236,rectWx,rectWy,rectWwidth,rectWheight);
+        //草地G
+        ctx.drawImage(imgG,0,0,2000,800,rectG1x,rectG1y,rectG1width,rectG1height);
+        ctx.drawImage(imgG,0,0,2000,800,0,380,rectG1width,rectG1height);
+        //冰地I
+        ctx.drawImage(imgI,0,0,640,509,rectIx,rectIy,rectIwidth,rectIheight);
+        //岩石R
+        ctx.drawImage(imgR,0,0,204,456,rectRx,rectRy,rectRwidth,rectRheight);
+        //魚魚Fi
+        ctx.drawImage(imgFi,0,0,301,216,rectFix,rectFiy,rectFiwidth,rectFiheight);
+        //結束E
+        ctx.drawImage(imgE,0,0,591,478,rectEx,rectEy,rectEwidth,rectEheight);
+        //雜草We
+        ctx.drawImage(imgWe,0,0,640,509,rectWex,rectWey,rectWewidth,rectWeheight);
+        //雞雞C
+        ctx.drawImage(imgC,0,0,262,236,rectCx,rectCy,rectCwidth,rectCheight);
+        //蛙蛙F
+        ctx.drawImage(imgF,0,0,1230,1018,rectFx,rectFy,rectFwidth,rectFheight);
+    }     
+    //--按鍵指令
+    function keyDownHandler(e) {
+    //--右鍵碼
+        if(e.keyCode == 39) {
+            rightPressed = true;
+        }
+    //--左鍵碼
+        else if(e.keyCode == 37) {
+            leftPressed = true;
+        }
+    //--上鍵碼
+        if(e.keyCode == 38) {      
+            forwardPressed = true;
+        }
+    //--下鍵碼
+        else if(e.keyCode == 40) {
+            backwardPressed = true;
+        }
+    }
+    //--放掉鍵指令
+    function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+        }
+        if(e.keyCode == 38) {
+            forwardPressed = false;
+        }
+        else if(e.keyCode == 40) {
+            backwardPressed = false;
+        } 
+    }
+    //--移動範圍
+    function draw() {
+    //--魚fi----------------------------------------------------------//    
+        if(rectFix + offsetFix > 720 ) {
+            offsetFix = -offsetFix;
+        }
+        rectFix += offsetFix;
+    	        
+                if(rectFix + offsetFix < 0 ) {
+            rectFix = 720;
+        }
+    //--箱子A
+        if(rectAy + offsetAy > 350 || rectAy + offsetAy < 100) {
+            offsetAy = -offsetAy;
+        }
+        rectAy += offsetAy;
+    //--箱子減速 ----------------------------------//
+        // dx *= 0.99;
+        // dy *= 0.99;
+        // dy += 0.5;
+    //--木頭W移動範圍------------------------------//
+        if(rectWy + offsetWy  >= 320  || rectWy + offsetWy <= 100) {
+            offsetWy = -offsetWy;
+        }
+        rectWy += offsetWy;
+        rectWy -= Math.floor(Math.random()*3);
+    //--雞雞C--------------------------------------//    
+        if(rectCy>350) {
+        }
+       	rectCy -= offsetCy;
+    	rectCx -= offsetCx;  
+     	if(rectCy < 0){
+     	rectCy =300;
+     	rectCx = 600;
+     	}
+    //--左右按鍵輸入指令和範圍
+        if(rightPressed && rectFx < canvas.width-rectFheight) {
+            rectFx += 10;
+        }
+        else if(leftPressed && rectFx > 0) {
+            rectFx -= 10;
+        }       
+    //--上下按鍵輸入指令和移動範圍
+
+         if(forwardPressed && rectFy > 100) {
+         if (forwardPressed && rectFy < 300 ){
+            
+            rectFy = 350 
+        	
+        }  
+        
+              rectFy -= 10;
+        	rectFx += 10; 
+         }
+          
+    //--岩石R碰撞    
+        if(rectFx + rectFwidth >= rectRx && rectFx <= rectRx + rectRwidth){
+        	if(rectFy + rectFheight >= rectRy && rectFy <= rectRy + rectRheight){
+            rectFx -= 2;
+            rectFy += 2;
+        	}
+        }
+    //--木頭W碰撞
+        if(rectFx + rectFwidth >= rectWx && rectFx <= rectWx + rectWwidth){
+        	if(rectFy + rectFheight >= rectWy && rectFy <= rectWy + rectWheight){
+            
+        	}
+        }
+    //--箱子A碰撞 
+        if(rectFx + rectFwidth >= rectAx && rectFx <= rectAx + rectAwidth){
+        	if(rectFy + rectFheight >= rectAy && rectFy <= rectAy + rectAheight){
+            
+            }
+        }
+    //--魚Fi碰撞 
+        if(rectFx + rectFwidth >= rectFix && rectFx <= rectFix + rectFiwidth){
+        	if(rectFy + rectFheight >= rectFiy && rectFy <= rectFiy + rectFiheight){
+             
+            }
+        }   
+    //--雜草We碰撞 
+        if(rectFx + rectFwidth >= rectWex && rectFx <= rectWex + rectFiwidth){
+        	if(rectFy + rectFheight >= rectWey && rectFy <= rectWey + rectWeheight){
+            
+            }
+        }    
+    //--冰地I碰撞
+        if(rectFx + rectFwidth >= rectIx && rectFx <= rectIx + rectIwidth){
+        	if(rectFy + rectFheight >= rectIy && rectFy <= rectIy + rectIheight){
+            rectFx += 1;
+            }
+        }    
+    //--雞雞C碰撞
+        if(rectFx + rectFwidth >= rectCx && rectFx <= rectCx + rectCwidth){
+        	if(rectFy + rectFheight >= rectCy && rectFy <= rectCy + rectCheight){
+           
+            }
+        } 
+    //--結束E---------------------------------------------//    
+        if(rectFx + rectFwidth >= 720 && rectFy  <= 110){
+            endsound.play();
+            
+        }
+    //--繪出圖形-----------------------------------------------------------
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBox();
+   }
+    setInterval(draw, 10);
+</script>
+</body>
+</html>

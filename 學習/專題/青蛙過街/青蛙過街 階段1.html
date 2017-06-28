@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop - lesson 3: bounce off the walls</title>
+    <style>canvas { background: #eee; }</style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="720" height="480"></canvas>
+
+<script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    
+    // 方塊1   
+    var ballRadiusX = 20;
+    var ballRadiusY = 40;
+    var x = canvas.width/2;
+    var y = canvas.height/2;
+    var dx = 0;
+    var dy = 2;
+    // 方塊2
+    var ballRadius2X = 10;
+    var ballRadius2Y = 30;
+    var x2 = canvas.width/2;
+    var y2 = canvas.height/2;
+    var dx2 = 0;
+    var dy2 = 3; 
+    // 手動方塊
+    var paddleHeight = 30;
+    var paddleWidth = 30;
+    var paddleX = (canvas.width-paddleWidth)/2;
+    var paddleY = (canvas.height-paddleWidth)/2;
+    var rightPressed = false;       //右鍵
+    var leftPressed = false;        //左鍵
+    var forwardPressed = false;     //上鍵
+    var backwardPressed = false;    //下鍵
+  
+  
+    var ensound = new Audio("MGS.mp3");
+    //繪出圖形
+    function drawBall() {
+    //--方塊1-------------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(100, y, ballRadiusX, ballRadiusY);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    //--方塊2------------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(200,y2,ballRadius2X,ballRadius2Y);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+    
+    function wall(){
+    //---兩邊牆---------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(0,0,canvas.width,90);
+        ctx.fillStyle="green";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.rect(0,350,canvas.width,180);
+        ctx.fillStyle="green";
+        ctx.fill();
+        ctx.closePath();
+    }
+    //---繪製手動-------------------------------------------//
+    
+    function drawPaddle() { 
+        ctx.beginPath();
+        ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.closePath();
+    }
+    
+    // 某一鍵被按下了
+    function keyDownHandler(e) {   
+    // 右鍵碼    
+        if(e.keyCode == 39) {       
+            rightPressed = true;
+        }
+    // 左鍵碼
+        else if(e.keyCode == 37) {  
+            leftPressed = true;
+        }
+    //上鍵碼    
+        if(e.keyCode == 38) {       
+            forwardPressed = true;
+        }
+    //下鍵碼    
+        else if(e.keyCode == 40) {  
+            backwardPressed = true;
+        }
+    }
+    //放掉鍵    
+    function keyUpHandler(e) { 
+        if(e.keyCode == 39) {
+            rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+        }
+        if(e.keyCode == 38) {
+            forwardPressed = false;
+        }
+        else if(e.keyCode == 40) {
+            backwardPressed = false;
+        }        
+    }         
+
+
+    // 方塊數據
+    function draw() {
+    // 方塊一移動範圍
+        if(x + dx > canvas.width-ballRadiusX || x + dx < ballRadiusX) {
+            dx = -dx;
+        }
+        if(y + dy > 300 || y + dy < 100) {
+            dy = -dy;
+        }
+    // 方塊減速 --------------------//   
+        // dx *= 0.99;
+        // dy *= 0.99;
+        // dy += 0.5;
+    //-------------------------------//    
+        x += dx;
+        y += dy;
+    
+    // 方塊二移動範圍
+        if(x2 + dx2 > canvas.width-ballRadiusY || x2 + dx2 < ballRadiusY) {
+            dx2 = -dx2;
+        }
+        if(y2 + dy2 > 320 || y2 + dy2 < 100) {
+            dy2 = -dy2;
+        }
+        x2 += dx2;
+        y2 += dy2;        
+    // 左右按鍵輸入指令
+        if(rightPressed && paddleX < canvas.width-paddleWidth) {
+            paddleX += 10;
+        }
+        else if(leftPressed && paddleX > 0) {
+            paddleX -= 10;
+        }       
+    // 上下按鍵輸入指令和移動範圍
+        if(backwardPressed && paddleY < 315) {
+            paddleY += 10;
+        }
+        else if(forwardPressed && paddleY > 95) {
+            paddleY -= 10;
+        }            
+        
+        if(x>paddleX && paddleX <paddleHeight){
+            
+        }
+    // 繪出圖形
+        ctx.clearRect(0, 0, canvas.width, canvas.height);        
+        drawBall();
+        wall();
+        drawPaddle();          
+    }
+    
+   
+  
+  
+  
+  
+  
+  setInterval(draw, 10);
+
+
+
+</script>
+
+</body>
+</html>

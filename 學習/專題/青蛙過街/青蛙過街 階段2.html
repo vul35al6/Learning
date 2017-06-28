@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>青蛙過街</title>
+<style>canvas { background: #87CEFA; }</style>
+</head>
+<body>
+    <canvas id="myCanvas" width="720" height="480"></canvas>
+    <img id = "room" widht="100" height="200"src="http://ppt.cc/smwpA" style="display:none" >
+
+    <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    var img = document.getElementById("room");
+    // 方塊1   
+    var rectAwight = 40;  
+    var rectAheight = 40;  
+    var rectAx = canvas.width/2;
+    var rectAy = canvas.height/2;
+    var offsetAx = 0;
+    var offsetAy = 2;
+    // 方塊2
+    var rectBwight = 40;
+    var rectBheight = 35;
+    var rectBx = canvas.width/2;
+    var rectBy = canvas.height/2;
+    var offsetBx = 0;
+    var offsetBy = 5; 
+    // 手動方塊
+    var rectPwight = 20;  
+    var rectPheight = 20;   
+    var rectPx = 10;
+    var rectPy = (canvas.height-rectPheight)/2;
+    var rightPressed = false;       //右鍵
+    var leftPressed = false;        //左鍵
+    var forwardPressed = false;     //上鍵
+    var backwardPressed = false;    //下鍵
+    //繪出圖形------------------------------------------------//
+    function drawBall() {
+    //--方塊A-------------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(100, rectAy, rectAwight, rectAheight);
+        ctx.fillStyle = "#A0522D";
+        ctx.fill();
+        ctx.closePath();
+    //--方塊B------------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(200,rectBy,rectBwight,rectBheight);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+    //--手動方塊P--------------------------------------------//
+    function drawPaddle() { 
+        ctx.beginPath();
+        ctx.rect(rectPx, rectPy, rectPwight, rectPheight);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.closePath();
+    }
+    //--草叢-------------------------------------------------//
+    function wall(){
+     ctx.drawImage(img,0,0,2000,800,0,0,canvas.width,90);
+     ctx.drawImage(img,0,0,2000,800,0,350,canvas.width,180);
+    }    
+    // 按鍵指令
+    function keyDownHandler(e) {   
+    // 右鍵碼    
+        if(e.keyCode == 39) {       
+            rightPressed = true;
+        }
+    // 左鍵碼
+        else if(e.keyCode == 37) {  
+            leftPressed = true;
+        }
+    //上鍵碼    
+        if(e.keyCode == 38) {       
+            forwardPressed = true;
+        }
+    //下鍵碼    
+        else if(e.keyCode == 40) {  
+            backwardPressed = true;
+        }
+    }
+    //放掉鍵    
+    function keyUpHandler(e) { 
+        if(e.keyCode == 39) {
+            rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+        }
+        if(e.keyCode == 38) {
+            forwardPressed = false;
+        }
+        else if(e.keyCode == 40) {
+            backwardPressed = false;
+        }        
+    }         
+    function draw() {
+    // 方塊A移動範圍       
+        if(rectAx + offsetAx > canvas.width-rectAheight || rectAx + offsetAx < rectAwight) {
+            offsetAx = -offsetAx;
+        }
+        if(rectAy + offsetAy > 320 || rectAy + offsetAy < 80) {
+            offsetAy = -offsetAy;
+        }
+        rectAx += offsetAx;
+        rectAy += offsetAy;
+    //--方塊減速 --------------------//   
+        // dx *= 0.99;
+        // dy *= 0.99;
+        // dy += 0.5;
+    //--方塊B移動範圍------------------------//    
+        if(rectBx + offsetBx > canvas.width-rectBheight || rectBx + offsetBx < rectBwight) {
+            offsetBx = -offsetBx;
+        }
+        if(rectBy + offsetBy > 320 || rectBy + offsetBy < 80) {
+            offsetBy = -offsetBy;
+        }
+        rectBx += offsetBx;
+        rectBy += offsetBy;        
+    // 左右按鍵輸入指令和範圍
+        if(rightPressed && rectPx < canvas.width-rectPheight) {
+            rectPx += 10;
+        }
+        else if(leftPressed && rectPx > 0) {
+            rectPx -= 10;
+        }       
+    // 上下按鍵輸入指令和移動範圍
+        if(backwardPressed && rectPy < 330) {
+            rectPy += 10;
+        }
+        else if(forwardPressed && rectPy > 95) {
+            rectPy -= 10;
+        }            
+    // 繪出圖形
+        ctx.clearRect(0, 0, canvas.width, canvas.height);        
+        drawBall();
+        wall();
+        drawPaddle();          
+    }
+    setInterval(draw, 10);
+</script>
+
+</body>
+</html>

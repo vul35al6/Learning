@@ -1,0 +1,23 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- 沒有這一行，如果用 Big5 編碼會出錯 -->
+<html>
+<center>
+<div id="myMessage">這裡是顯現文字的地方</div>
+</center>
+</html>
+
+<script type="text/javascript" language="javascript">
+var CountDownSecond = 11; //讓倒數計時器一開始的數字是10，10秒鐘後關閉視窗
+var OpenWindows = window.open("http://www.google.com.tw","new_window","width=400,height=300","");
+CountDown();
+function CountDown() {
+if (CountDownSecond !=0) {
+CountDownSecond -= 1;
+document.getElementById("myMessage").innerHTML = "視窗關閉倒數 " + CountDownSecond + " 秒";
+} else {
+document.getElementById("myMessage").innerHTML = "視窗關閉！";
+OpenWindows.close();
+return;
+}
+setTimeout("CountDown()",1000);
+}
+</script>

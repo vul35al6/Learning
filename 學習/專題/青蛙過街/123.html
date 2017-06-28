@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>青蛙過街</title>
+<style>canvas { background: url("http://i.imgur.com/ExBdGfu.jpg"); }</style><br>
+</head>
+<body>
+    <form id="Time" runat="server">
+        <div id='div'>
+        </div>
+    </form>
+    
+    <canvas id = "myCanvas" width = "720" height = "480"></canvas>
+    <img id = "grass" widht = "100" height = "100" src = "http://ppt.cc/smwpA" style = "display:none" >
+    <img id = "frog" widht = "100" height = "100" src = "http://i.imgur.com/eiDkUaJ.png" style = "display:none" >
+    <img id = "wood" widht = "100" height = "100" src = "http://i.imgur.com/jEXx4Rk.png" style = "display:none" >
+    <img id = "box" widht = "100" height = "100" src = "http://i.imgur.com/HcyxSeH.png"  style = "display:none" >  
+    <img id = "rock" widht = "100" height = "100" src = "http://i.imgur.com/3uBqRGt.png" style = "display:none" >     
+    <img id = "fish" widht = "100" height = "100" src = "http://i.imgur.com/MlnLnXr.png" style = "display:none" >
+    <img id = "end" widht = "100" height = "100" src = "http://i.imgur.com/Z4NI2SP.png" >
+    
+    <script>
+
+    //----------------------------------------------------------------//
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    var imgG = document.getElementById("grass");
+    var imgF = document.getElementById("frog");
+    var imgR = document.getElementById("rock");
+   
+
+
+    //--手動蛙蛙F----------------------------------------------//
+    var rectFwidth = 60;
+    var rectFheight = 60;
+    var rectFx = 0;
+    var rectFy = 100;
+    var rightPressed = false;       //右鍵
+    var leftPressed = false;        //左鍵
+    var forwardPressed = false;     //上鍵
+    var backwardPressed = false;    //下鍵
+    //--草叢G1------------------------------------------------//
+    var rectG1width = 720;
+    var rectG1height = 100;
+    var rectG1x = 0;
+    var rectG1y = 0;
+    //--岩石R-------------------------------------------------//
+    var rectRwidth = 150;
+    var rectRheight = 150;
+    var rectRx = 150;
+    var rectRy = 100;
+
+
+    //--箱子A-------------------------------------------------//
+   
+    
+    //--手動蛙蛙F---------------------------------------------//
+    function frog(){
+        ctx.drawImage(imgF,0,0,1230,1018,rectFx,rectFy,rectFwidth,rectFheight);
+    }
+    //--草叢G-------------------------------------------------//
+    function grass(){
+        ctx.drawImage(imgG,0,0,2000,800,rectG1x,rectG1y,rectG1width,rectG1height);
+        ctx.drawImage(imgG,0,0,2000,800,0,380,rectG1width,rectG1height);
+    }
+    //--岩石R-------------------------------------------------//
+    function rock(){
+        ctx.drawImage(imgR,0,0,204,456,rectRx,rectRy,rectRwidth,rectRheight);
+    }
+   
+    
+    
+    //--按鍵指令
+    function keyDownHandler(e) {
+    //--右鍵碼
+        if(e.keyCode == 39) {
+            rightPressed = true;
+        }
+    //--左鍵碼
+        else if(e.keyCode == 37) {
+            leftPressed = true;
+        }
+    //--上鍵碼
+        if(e.keyCode == 38) {      
+            forwardPressed = true;
+        }
+    //--下鍵碼
+        else if(e.keyCode == 40) {
+            backwardPressed = true;
+        }
+    }
+    //--放掉鍵指令
+    function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+        }
+        if(e.keyCode == 38) {
+            forwardPressed = false;
+        }
+        else if(e.keyCode == 40) {
+            backwardPressed = false;
+        } 
+    }
+    //--移動範圍
+    function draw() {
+
+
+
+    //--左右按鍵輸入指令和範圍
+        if(rightPressed && rectFx < canvas.width-rectFheight) {
+            rectFx += 7;
+        }
+        else if(leftPressed && rectFx > 0) {
+            rectFx -= 7;
+        }       
+    //--上下按鍵輸入指令和移動範圍
+        if(backwardPressed && rectFy < 320) {
+            rectFy += 7;
+        }
+        else if(forwardPressed && rectFy > 100) {
+            rectFy -= 7;
+        }
+    //--岩石R碰撞    
+        if(rectFx + rectFwidth >= rectRx && rectFx <= rectRx + rectRwidth){
+        	if(rectFy + rectFheight >= rectRy && rectFy <= rectRy + rectRheight){
+            rectFx -= 2;
+            rectFy += 2;
+        	}
+        }
+
+
+    //--繪出圖形-----------------------------------------------------------
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+       
+        grass();
+        frog();
+       
+    	rock();
+   		
+	
+   }
+    setInterval(draw, 10);
+</script>
+</body>
+</html>

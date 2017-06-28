@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>青蛙過街</title>
+<style>canvas { background: #87CEFA; }</style>
+</head>
+<body>
+    <canvas id = "myCanvas" width = "720" height = "480"></canvas>
+    <img id = "grass" widht="100" height = "200" src = "http://ppt.cc/smwpA" style = "display:none" >
+    <img id = "frog" widht="152" height = "198" src = "http://ppt.cc/4ZNwg" style = "display:none" >
+    <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    var imgA = document.getElementById("grass");
+    var imgB = document.getElementById("frog");
+    //--方塊A
+    var rectAwidth = 40;
+    var rectAheight = 40;
+    var rectAx = canvas.width/2;
+    var rectAy = canvas.height/2;
+    var offsetAx = 0;
+    var offsetAy = 2;
+    //--方塊B
+    var rectBwidth = 40;
+    var rectBheight = 35;
+    var rectBx = 300;
+    var rectBy = canvas.height/2;
+    var offsetBx = 0;
+    var offsetBy = 5;
+    //--手動蛙蛙F---------------------------------------------------//
+    var rectFwidth = 40;
+    var rectFheight = 40;
+    var rectFx = 100;
+    var rectFy = (canvas.height-rectFheight)/2;
+    var rightPressed = false;       //右鍵
+    var leftPressed = false;        //左鍵
+    var forwardPressed = false;     //上鍵
+    var backwardPressed = false;    //下鍵
+    //--繪出圖形------------------------------------------------//
+    function drawBall() {
+    //--方塊A-------------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(rectAx, rectAy, rectAwidth, rectAheight);
+        ctx.fillStyle = "#A0522D";
+        ctx.fill();
+        ctx.closePath();
+    //--方塊B------------------------------------------------//
+        ctx.beginPath();
+        ctx.rect(rectBx,rectBy,rectBwidth,rectBheight);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+    //--手動蛙蛙F--------------------------------------------//
+    function frog(){
+        ctx.drawImage(imgB,0,0,760,990,rectFx,rectFy,rectFwidth,rectFheight);
+    }
+    //--草叢-------------------------------------------------//
+    function grass(){
+        ctx.drawImage(imgA,0,0,2000,800,0,0,canvas.width,90);
+        ctx.drawImage(imgA,0,0,2000,800,0,350,canvas.width,180);
+    }
+    //--按鍵指令
+    function keyDownHandler(e) {
+    //--右鍵碼
+        if(e.keyCode == 39) {
+            rightPressed = true;
+        }
+    //--左鍵碼
+        else if(e.keyCode == 37) {
+            leftPressed = true;
+        }
+    //--上鍵碼
+        if(e.keyCode == 38) {      
+            forwardPressed = true;
+        }
+    //--下鍵碼
+        else if(e.keyCode == 40) {
+            backwardPressed = true;
+        }
+    }
+    //--放掉鍵指令
+    function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+        }
+        if(e.keyCode == 38) {
+            forwardPressed = false;
+        }
+        else if(e.keyCode == 40) {
+            backwardPressed = false;
+        } 
+    }
+    function draw() {
+    //--方塊A移動範圍
+        if(rectAy + offsetAy > 320 || rectAy + offsetAy < 80) {
+            offsetAy = -offsetAy;
+        }
+        rectAy += offsetAy;
+    //--方塊減速 --------------------//
+        // dx *= 0.99;
+        // dy *= 0.99;
+        // dy += 0.5;
+    //--方塊B移動範圍------------------------//
+        if(rectBy + offsetBy > 320 || rectBy + offsetBy < 80) {
+            offsetBy = -offsetBy;
+        }
+        rectBy += offsetBy;
+    //--左右按鍵輸入指令和範圍
+        if(rightPressed && rectFx < canvas.width-rectFheight) {
+            rectFx += 3;
+        }
+        else if(leftPressed && rectFx > 0) {
+            rectFx -= 3;
+        }       
+    //--上下按鍵輸入指令和移動範圍
+        if(backwardPressed && rectFy < 330) {
+            rectFy += 10;
+        }
+        else if(forwardPressed && rectFy > 95) {
+            rectFy -= 10;
+        }
+    //--繪出圖形
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        grass();
+        frog();
+    	
+        if(rectFx + rectFwidth >= rectBx){
+        if(rectFx <= rectBx + rectBwidth ){
+        alert("安安");
+        }
+        }
+ 
+   
+        
+    
+    }
+    setInterval(draw, 10);
+</script>
+</body>
+</html>
