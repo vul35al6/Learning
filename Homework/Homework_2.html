@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>水仙花數</title>
+</head>
+<body>
+<script>
+var number1 = 0;
+var number2;
+var a;
+var b;
+var i;
+        for (b=0;b<10;b++){
+            for (a=0;a<10;a++){
+                for (i = 0; i < 10; i++) {
+                    number1=Math.pow(b,3)+Math.pow(a,3)+Math.pow(i,3);
+                    number2=i+a*10+b*100;
+                        if (number1==number2){
+                            document.getElementById("s").innerHTML += number2+"<br>";
+                            
+                        }
+                }
+            }
+        }
+
+</script>
+</body>
+</html>
+
